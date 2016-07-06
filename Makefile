@@ -49,7 +49,7 @@ CXXFLAGS:=$(CXXFLAGS) -I$(HEADER_DIR)
 all: test
 	
 test: $(BUILD_DIR)/Test.o $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o $(BUILD_DIR)/PluginCore.o $(BUILD_DIR)/PluginManagerCore.o $(BUILD_DIR)/Plugin.o $(BUILD_DIR)/PluginManager.o
-	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/TestInfo.o $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o \
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/Test.o $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o \
 		$(BUILD_DIR)/PluginCore.o $(BUILD_DIR)/PluginManagerCore.o $(BUILD_DIR)/Plugin.o $(BUILD_DIR)/PluginManager.o -o $(BIN_DIR)/test
 	
 # make .o files

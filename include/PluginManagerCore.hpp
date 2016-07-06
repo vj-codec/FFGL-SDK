@@ -116,6 +116,33 @@ class PluginManagerCore
     DWORD getPluginCapability(DWORD capability);
 
     ///
+    /// \brief Add a numeric parameter to the PluginManagerCore's ParameterTemplate
+    ///
+    /// \param name            The name of the Parameter
+    /// \param type            The underlying type of the Parameter - one of the 
+    ///                        FF_TYPE_... constexprs. FF_TYPE_TEXT should be added 
+    ///                        with addTextParameter.
+    /// \param defaultValue    The default value of the parameter. Must be in 0...1.
+    /// \param display         Optional. A function used to retrieve the value in a
+    ///                        format suitable for display. A default is provided.
+    ///
+    void addNumericParameter(char name[MAX_PARAMETER_NAME_LENGTH + 1],
+                             DWORD type, float defaultValue,
+                             DisplayFn display = displayNumericParameter);
+
+    ///
+    /// \brief Add a text parameter to the PluginManagerCore's ParameterTemplate
+    ///
+    /// \param name            The name of the Parameter
+    /// \param defaultValue    The default value of the parameter. Must be null-terminated.
+    /// \param display         Optional. A function used to retrieve the value in a
+    ///                        format suitable for display. A default is provided.
+    ///
+    void addTextParameter(char name[MAX_PARAMETER_NAME_LENGTH + 1],
+                          char* defaultValue,
+                          DisplayFn display = displayStringParameter);
+
+    ///
     /// \brief Gets the number of parameters in the PluginManagerCore's
     /// ParameterTemplate
     ///
@@ -158,9 +185,7 @@ class PluginManagerCore
     PluginNode* m_tail;
     Info m_info;
     TimeSetter m_timeSetter;
-
-    protected:
-    ParameterTemplate parameters; ///< The parameter template
+    ParameterTemplate m_parameters; ///< The parameter template
 };
 
 #endif

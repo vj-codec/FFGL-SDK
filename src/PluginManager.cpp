@@ -6,6 +6,8 @@ PluginManager::PluginManager()
       m_initialised(false)
 {}
 
+PluginManager::~PluginManager() {}
+
 DWORD PluginManager::initialise() {
     if (m_initialised)
         return FF_SUCCESS;

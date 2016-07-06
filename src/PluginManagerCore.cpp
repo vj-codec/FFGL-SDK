@@ -4,8 +4,8 @@ PluginManagerCore::PluginManagerCore()
     : m_head(nullptr),
       m_tail(nullptr),
       m_info(),
-      m_parameters(),
-      m_timeSetter(nullptr)
+      m_timeSetter(nullptr),
+      m_parameters()
 {}
 PluginManagerCore::~PluginManagerCore()
 {
@@ -77,6 +77,17 @@ DWORD PluginManagerCore::getPluginCapability(DWORD capability) {
         return m_info.getPluginCapability(capability);
 }
 
+void PluginManagerCore::addNumericParameter(char name[MAX_PARAMETER_NAME_LENGTH + 1],
+                                            DWORD type, float defaultValue,
+                                            DisplayFn display /* = displayNumericParameter */) {
+    m_parameters.addNumericParameter(name, type, defaultValue, display);
+}
+
+void PluginManagerCore::addTextParameter(char name[MAX_PARAMETER_NAME_LENGTH + 1],
+                                         char* defaultValue,
+                                         DisplayFn display /* = displayStringParameter */) {
+    m_parameters.addTextParameter(name, defaultValue, display);
+}
 DWORD PluginManagerCore::getNumParameters() {
     return m_parameters.getNumParameters();
 }
