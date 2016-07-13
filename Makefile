@@ -48,15 +48,21 @@ CXXFLAGS:=$(CXXFLAGS) -I$(HEADER_DIR)
 
 all: test
 	
-test: $(BUILD_DIR)/Test.o $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o $(BUILD_DIR)/PluginCore.o $(BUILD_DIR)/PluginManagerCore.o $(BUILD_DIR)/Plugin.o $(BUILD_DIR)/PluginManager.o
-	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/Test.o $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o \
-		$(BUILD_DIR)/PluginCore.o $(BUILD_DIR)/PluginManagerCore.o $(BUILD_DIR)/Plugin.o $(BUILD_DIR)/PluginManager.o -o $(BIN_DIR)/test
+test: $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/FFGLExtensions.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o \
+		$(BUILD_DIR)/PluginCore.o $(BUILD_DIR)/PluginManagerCore.o $(BUILD_DIR)/Plugin.o $(BUILD_DIR)/PluginManager.o \
+		$(BUILD_DIR)/RenderTexture.o $(BUILD_DIR)/Shader.o $(BUILD_DIR)/ShaderProgram.o $(BUILD_DIR)/Test.o
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/FFGL.o $(BUILD_DIR)/FFGLExtensions.o $(BUILD_DIR)/Info.o $(BUILD_DIR)/Parameters.o $(BUILD_DIR)/ParameterTemplate.o \
+		$(BUILD_DIR)/PluginCore.o $(BUILD_DIR)/PluginManagerCore.o $(BUILD_DIR)/Plugin.o $(BUILD_DIR)/PluginManager.o \
+		$(BUILD_DIR)/RenderTexture.o $(BUILD_DIR)/Shader.o $(BUILD_DIR)/ShaderProgram.o $(BUILD_DIR)/Test.o -o $(BIN_DIR)/test
 	
 # make .o files
 $(BUILD_DIR)/FFGL.o: $(SOURCE_DIR)/FFGL.cpp $(HEADER_DIR)/FFGL.hpp Makefile
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/Info.o: $(SOURCE_DIR)/Info.cpp $(HEADER_DIR)/Info.hpp Makefile
+$(BUILD_DIR)/FFGLExtensions.o: $(SOURCE_DIR)/FFGLExtensions.cpp $(HEADER_DIR)/FFGLExtensions.hpp Makefile
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/Info.o: $(SOURCE_DIR)/Info.cpp $(HEADER_DIR)/Info.hpp $(HEADER_DIR)/Config.hpp Makefile
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/Parameters.o: $(SOURCE_DIR)/Parameters.cpp $(HEADER_DIR)/Parameters.hpp Makefile
@@ -75,6 +81,15 @@ $(BUILD_DIR)/Plugin.o: $(SOURCE_DIR)/Plugin.cpp $(HEADER_DIR)/Plugin.hpp Makefil
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/PluginManager.o: $(SOURCE_DIR)/PluginManager.cpp $(HEADER_DIR)/PluginManager.hpp Makefile
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/RenderTexture.o: $(SOURCE_DIR)/RenderTexture.cpp $(HEADER_DIR)/RenderTexture.hpp Makefile
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/Shader.o: $(SOURCE_DIR)/Shader.cpp $(HEADER_DIR)/Shader.hpp Makefile
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/ShaderProgram.o: $(SOURCE_DIR)/ShaderProgram.cpp $(HEADER_DIR)/ShaderProgram.hpp Makefile
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/Test.o: $(SOURCE_DIR)/Test.cpp Makefile

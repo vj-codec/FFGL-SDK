@@ -3,40 +3,40 @@
 #include <stdexcept>
 
 ShaderProgram::ShaderProgram()
-    : m_programId(glCreateProgram()),
-      m_vertShader(GL_VERTEX_SHADER),
-      m_fragShader(GL_FRAGMENT_SHADER),
+    : m_programId(glExt.glCreateProgramObjectARB()),
+      m_vertShader(GL_VERTEX_SHADER_ARB),
+      m_fragShader(GL_FRAGMENT_SHADER_ARB),
       m_info(nullptr),
       m_linked(false)
 {}
 
-ShaderProgram::ShaderProgram(char* vertShaderBody, char* fragShaderBody)
-    : m_programId(glCreateProgram()),
-      m_vertShader(GL_VERTEX_SHADER, vertShaderBody),
-      m_fragShader(GL_FRAGMENT_SHADER, fragShaderBody),
+ShaderProgram::ShaderProgram(const GLcharARB* vertShaderBody, const GLcharARB* fragShaderBody)
+    : m_programId(glExt.glCreateProgramObjectARB()),
+      m_vertShader(GL_VERTEX_SHADER_ARB, vertShaderBody),
+      m_fragShader(GL_FRAGMENT_SHADER_ARB, fragShaderBody),
       m_info(nullptr),
       m_linked(false)
 {}
 
-ShaderProgram::ShaderProgram(char* vertShaderBody, char* fragShaderBody, GLint vertBodySize, GLint fragBodySize)
-    : m_programId(glCreateProgram()),
-      m_vertShader(GL_VERTEX_SHADER, vertShaderBody, vertBodySize),
-      m_fragShader(GL_FRAGMENT_SHADER, fragShaderBody, fragBodySize),
+ShaderProgram::ShaderProgram(const GLcharARB* vertShaderBody, const GLcharARB* fragShaderBody, GLint vertBodySize, GLint fragBodySize)
+    : m_programId(glExt.glCreateProgramObjectARB()),
+      m_vertShader(GL_VERTEX_SHADER_ARB, vertShaderBody, vertBodySize),
+      m_fragShader(GL_FRAGMENT_SHADER_ARB, fragShaderBody, fragBodySize),
       m_info(nullptr),
       m_linked(false)
 {}
 
 ShaderProgram::~ShaderProgram() {
-    glDeleteProgram(m_programId);
+    glExt.glDeleteObjectARB(m_programId);
     delete[] m_info;
 }
 
-void ShaderProgram::setVertShader(char* shaderBody, GLint bodySize/* = 0 */) {
+void ShaderProgram::setVertShader(const GLcharARB* shaderBody, GLint bodySize/* = 0 */) {
     m_linked = false;
     m_vertShader.setShader(shaderBody, bodySize);
 }
 
-void ShaderProgram::setFragShader(char* shaderBody, GLint bodySize/* = 0 */) {
+void ShaderProgram::setFragShader(const GLcharARB* shaderBody, GLint bodySize/* = 0 */) {
     m_linked = false;
     m_fragShader.setShader(shaderBody, bodySize);
 }
@@ -51,42 +51,42 @@ void ShaderProgram::link() {
         m_fragShader.compile();
 
     //try to link the program
-    glLinkProgram(m_programId);
+    glExt.glLinkProgramARB(m_programId);
     updateInfo();
-    GLenum success;
-    glGetProgramiv(m_programId, GL_LINK_STATUS, &success);
+    GLint success;
+    glExt.glGetObjectParameterivARB(m_programId, GL_OBJECT_LINK_STATUS_ARB, &success);
 
     //throw exception if something goes wrong
-    if (success == GL_FALSE)
+    if (success == 0)
         throw std::runtime_error(m_info);
 
     m_linked = true;
 }
 
 void ShaderProgram::bind() {
-    glUseProgram(m_programId);
+    glExt.glUseProgramObjectARB(m_programId);
 }
 
 void ShaderProgram::unbind() {
-    glUseProgram(0);
+    glExt.glUseProgramObjectARB(0);
 }
 
 bool ShaderProgram::isLinked() const {
     return m_linked;
 }
 
-const char* ShaderProgram::getInfo() const {
+const GLcharARB* ShaderProgram::getInfo() const {
     return m_info;
 }
 
-ShaderProgram::operator GLint() {
+ShaderProgram::operator GLhandleARB() {
     return m_programId;
 }
 
 void ShaderProgram::updateInfo() {
     delete[] m_info;
-    GLsizei logLength;
-    glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &logLength);
+    GLint logLength;
+    glExt.glGetObjectParameterivARB(m_programId, GL_OBJECT_INFO_LOG_LENGTH_ARB, &logLength);
     m_info = new char[logLength];
-    glGetProgramInfoLog(m_programId, logLength, &logLength, m_info);  
+    glExt.glGetInfoLogARB(m_programId, logLength, &logLength, m_info);  
 }

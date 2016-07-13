@@ -3,54 +3,54 @@
 #include <stdexcept>
 
 Shader::Shader(GLenum shaderType)
-    : m_shaderId(glCreateShader(shaderType)),
+    : m_shaderId(glExt.glCreateShaderObjectARB(shaderType)),
       m_info(nullptr),
       m_compiled(false)
 {}
 
-Shader::Shader(GLenum shaderType, char* shaderBody, GLint bodySize/* = 0 */)
+Shader::Shader(GLenum shaderType, const GLcharARB* shaderBody, GLint bodySize/* = 0 */)
     : Shader(shaderType)
 {
     setShader(shaderBody, bodySize);
 }
 
 Shader::~Shader() {
-    glDeleteShader(m_shaderId);
+    glExt.glDeleteObjectARB(m_shaderId);
     delete[] m_info;
 }
 
-void Shader::setShader(char* shaderBody, GLint bodySize/* = 0 */) {
+void Shader::setShader(const GLcharARB* shaderBody, GLint bodySize/* = 0 */) {
     m_compiled = false;
     if (bodySize == 0)
         //assumes shaderBody is null-terminated
-        glShaderSource(m_shaderId, 1, &shaderBody, 0);
+        glExt.glShaderSourceARB(m_shaderId, 1, &shaderBody, nullptr);
     else
-        glShaderSource(m_shaderId, 1, &shaderBody, &bodySize);
+        glExt.glShaderSourceARB(m_shaderId, 1, &shaderBody, &bodySize);
 }
 
 void Shader::compile() {
     m_compiled = false;
 
     //try to compile the shader
-    glCompileShader(m_shaderId);
+    glExt.glCompileShaderARB(m_shaderId);
     updateInfo();
-    GLenum success;
-    glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &success);
+    GLint success;
+    glExt.glGetObjectParameterivARB(m_shaderId, GL_OBJECT_COMPILE_STATUS_ARB, &success);
 
     //throw exception if something goes wrong
-    if (success == GL_FALSE)
+    if (success == 0)
         throw std::runtime_error(m_info);
 
     m_compiled = true;
 }
 
-GLenum Shader::getType() const {
-    GLenum retVal;
-    glGetShaderiv(m_shaderId, GL_SHADER_TYPE, &retVal);
+GLint Shader::getType() const {
+    GLint retVal;
+    glExt.glGetObjectParameterivARB(m_shaderId, GL_OBJECT_SUBTYPE_ARB, &retVal);
     return retVal;
 }
 
-const char* Shader::getInfo() const {
+const GLchar* Shader::getInfo() const {
     return m_info;
 }
 
@@ -58,14 +58,14 @@ bool Shader::isCompiled() const {
     return m_compiled;
 }
 
-Shader::operator GLint() {
+Shader::operator GLhandleARB() {
     return m_shaderId;
 }
 
 void Shader::updateInfo() {
     delete[] m_info;
     GLsizei logLength;
-    glGetShaderiv(m_shaderId, GL_INFO_LOG_LENGTH, &logLength);
+    glExt.glGetObjectParameterivARB(m_shaderId, GL_OBJECT_INFO_LOG_LENGTH_ARB, &logLength);
     m_info = new char[logLength];
-    glGetShaderInfoLog(m_shaderId, logLength, &logLength, m_info);  
+    glExt.glGetInfoLogARB(m_shaderId, logLength, &logLength, m_info);  
 }
