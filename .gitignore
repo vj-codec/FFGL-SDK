@@ -2,3 +2,10 @@ bin/*
 build/*
 docs/*
 old_docs/*
+
+Debug/*
+Release/*
+.vs/*
+*.VC.db
+*.VC.VC.opendb
+*.vcxproj.user

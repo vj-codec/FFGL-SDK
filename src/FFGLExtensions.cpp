@@ -1,6 +1,8 @@
 #include "FFGLExtensions.hpp"
 #include <cstring>
 
+FFGLExtensions glExt;
+
 FFGLExtensions::FFGLExtensions()
 {
     initialize();

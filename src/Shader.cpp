@@ -50,7 +50,7 @@ GLint Shader::getType() const {
     return retVal;
 }
 
-const GLchar* Shader::getInfo() const {
+const GLcharARB* Shader::getInfo() const {
     return m_info;
 }
 

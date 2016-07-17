@@ -13,7 +13,7 @@ class Shader {
     void compile();
 
     GLint getType() const;
-    const GLchar* getInfo() const;
+    const GLcharARB* getInfo() const;
     bool isCompiled() const;
     operator GLhandleARB();
 
@@ -22,7 +22,7 @@ class Shader {
 
     private:
     GLhandleARB m_shaderId;
-    GLchar* m_info;
+    GLcharARB* m_info;
     bool m_compiled;
 };
 

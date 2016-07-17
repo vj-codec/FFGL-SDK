@@ -1,5 +1,5 @@
-#ifndef NE_GLEXTENSIONS
-#define NE_GLEXTENSIONS
+#ifndef NE_FFGLEXTENSIONS
+#define NE_FFGLEXTENSIONS
 
 //originally this file came from SGI.
 //Lev Povalahev extended it with his great library "GLew".
@@ -478,7 +478,7 @@ private:
 ////////////////////////////////////
 //Universal-use FFGLExtensions instance
 ////////////////////////////////////
-FFGLExtensions glExt;
+extern FFGLExtensions glExt;
 
 #endif
 
